@@ -22,7 +22,7 @@ app.get('/', (req, res)  => {
     res.send('Welcome to Authentication API v2');
 });
 
-app.use('/api/vi/user', userRouter);
+app.use('/api/v1/user', userRouter);
 
 app.listen(port || 5000, () => console.log(`Express Server is running on port ${port}`));
 
