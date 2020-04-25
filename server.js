@@ -16,5 +16,10 @@ db.once('open', () => console.log('Connected to Database'));
 app.use(cookieParser());
 app.use(express.json());
 
+// Routes
+app.get('/', (req, res)  => {
+    res.send('Hello Dear');
+});
+
 app.listen(port || 5000, () => console.log(`Express Server is running on port ${port}`));
 
