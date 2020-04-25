@@ -28,8 +28,10 @@ passport.use(new JwtStrategy({
     });
 }));
 
-// authentication local strategy using username and password
-passport.use(new LocalStrategy((username, password, done) => {
+// authentication local strategy using email and password
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+  },(username, password, done) => {
     User.findOne({ username }, (err, user) => {
         if(err)
             return done(err);
