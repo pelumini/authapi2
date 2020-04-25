@@ -18,7 +18,27 @@ app.use(express.json());
 
 // Routes
 app.get('/', (req, res)  => {
-    res.send('Hello Dear');
+    res.send('Welcome to Authentication API v2');
+});
+
+// Testing our models/routes
+const User = require('./models/User');
+
+const userInput = {
+    firstname: "Pelumi",
+    middlename: "",
+    lastname: "Bodunwa",
+    email: "pelumini@gmail.com",
+    photo: "",
+    role: "admin",
+    password: "emma@nuel"
+}
+
+const user = new User(userInput);
+user.save((err, document) => {
+    if(err)
+        console.log(err);
+    console.log(document);
 });
 
 app.listen(port || 5000, () => console.log(`Express Server is running on port ${port}`));
