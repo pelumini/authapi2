@@ -7,9 +7,16 @@ const JWT = require('jsonwebtoken');
 const User = require('../models/User');
 const passportConfig = require('../auth/passport');
 
+const signToken = userID => {
+    return JWT.sign({
+        iss: "PelumiBodunwa",
+        sub: userID
+    }, "PelumiBodunwa", {expiresIn: "1h"});
+}
+
 
 // REGISTER A NEW USER
-router.post('/signup', async (req, res) => {
+router.post('/signup', (req, res) => {
     const { firstname, middlename, lastname, email, role, photo, password } = req.body;
     User.findOne({ email }, (err, user) => {
         if(err)
@@ -29,14 +36,18 @@ router.post('/signup', async (req, res) => {
   
 });
 
-// GET ALL USERS
-router.get('/', async (req, res) => {
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+
+// LOGIN A REGISTERED USER
+router.post('/login', passport.authenticate('local', {session:false}), (req, res) => {
+    if(req.isAuthenticated()){
+        console.log(req.user);
+        const { _id, email, role } = req.user;
+        const token = signToken(_id);
+        res.cookie('access_token', token, { httpOnly: true, sameSite: true});
+        res.status(200).json({ isAuthenticated: true, user: {email, role}});
+    }  
 });
+
+
 
 module.exports = router;
