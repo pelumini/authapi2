@@ -51,6 +51,21 @@ router.get('/logout', passport.authenticate('jwt', {session:false}), (req, res) 
     res.json({ user: { email: "", role: ""}, success: true });
 });
 
+// ADMIN PANEL
+router.get('/admin', passport.authenticate('jwt', {session:false}), (req, res) => {
+    if(req.user.role === 'admin'){
+        res.status(200).json({ message: { msgBody: "You are an admin", msgError: false }});
+    } else {
+        res.status(403).json({ message: { msgBody: "You are not an admin", msgError: true }});
+    }
+});
+
+// CONTINOUS AUTHENTICATION
+router.get('/authenticated', passport.authenticate('jwt', {session:false}), (req, res) => {
+    const { email, role } = req.user;
+    res.status(200).json({ isAuthenticated: true, user: {email, role}});
+});
+
 
 
 module.exports = router;
