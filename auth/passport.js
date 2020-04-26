@@ -31,12 +31,14 @@ passport.use(new JwtStrategy({
 // authentication local strategy using email and password
 passport.use(new LocalStrategy({
     usernameField: 'email'
-  },(username, password, done) => {
-    User.findOne({ username }, (err, user) => {
-        if(err)
+  },(email, password, done) => {
+    User.findOne({ email }, (err, user) => {
+        if(err) {
             return done(err);
-        if(!user)
+        }
+        if(!user) {
             return done(null, false);
+        }
         user.comparePassword(password, done);
     });
 }));
