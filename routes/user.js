@@ -14,7 +14,6 @@ const signToken = userID => {
     }, "PelumiBodunwa", {expiresIn: "1h"});
 }
 
-
 // REGISTER A NEW USER
 router.post('/signup', (req, res) => {
     const { firstname, middlename, lastname, email, role, photo, password } = req.body;
@@ -36,7 +35,6 @@ router.post('/signup', (req, res) => {
   
 });
 
-
 // LOGIN A REGISTERED USER
 router.post('/login', passport.authenticate('local', {session:false}), (req, res) => {
     if(req.isAuthenticated()){
@@ -45,6 +43,12 @@ router.post('/login', passport.authenticate('local', {session:false}), (req, res
         res.cookie('access_token', token, { httpOnly: true, sameSite: true});
         res.status(200).json({ isAuthenticated: true, user: {email, role}});
     } 
+});
+
+// LOGOUT A LOGIN USER
+router.get('/logout', passport.authenticate('jwt', {session:false}), (req, res) => {
+    res.clearCookie('access_token');
+    res.json({ user: { email: "", role: ""}, success: true });
 });
 
 
